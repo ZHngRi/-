@@ -1,0 +1,75 @@
+#include<iostream>
+#include<fstream>
+#include<string>
+#include<windows.h>
+#include<opencv2/opencv.hpp>
+#include<opencv2/highgui.hpp>
+#include<opencv2/imgproc.hpp>
+#pragma warning(disable : 4996)
+using namespace std;
+using namespace cv;
+#define page 10000
+void recursur();
+int main()
+{
+	const char character[] = "@B%8&WM#*-_+~<>i!lI;:,\"^`'.ZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'. ";
+	int i=0;
+	while (i < page)
+	{
+		char naem[] = "F:\\C++\\ImageToASC\\ImageToASC\\out\\BA(00000).png";
+		char Tname[100] = "F:\\C++\\ImageToASC\\ImageToASC\\out\\BA(";
+		char t[10];
+		itoa(i, t, 10);
+		//cout << t << endl;
+		strcat(Tname, t);
+		strcat(Tname, ").png");
+		cout << Tname<<endl;
+
+		Mat image = imread(Tname);
+		//cout << image;
+		Mat GrayImage;
+		cvtColor(image, GrayImage, COLOR_RGB2GRAY);
+		int w, y;
+
+
+		string str;
+		for (int j = 0;j < GrayImage.rows;j+=10)
+		{
+			for (int k = 0;k < GrayImage.cols;k+=5)
+			{
+				int grayVal=0;
+					grayVal += (int)GrayImage.at<uchar>(j , k);
+				//获取坐标像素点的灰度值。（强制类型转换是为了避免负值）
+				int index = 69.0 / 255.0 * grayVal;             //根据灰度值选取字符
+				str += character[index];
+			}
+			str += "\r";
+		}
+		cout << GrayImage.rows << " " << GrayImage.cols << " "<< str << endl;
+		char naem1[] = "aim\\BA(00000).txt";
+		char Tname1[18] = "aim\\BA(";
+		strcat(Tname1, t);
+		strcat(Tname1, ").txt");
+
+		ofstream txt;
+		txt.open(Tname1);
+		txt << str << endl;
+		txt.close();
+		i++;
+		Sleep(30);
+		//recursur();
+
+	}
+	return 0;
+}
+void recursur()
+{
+	HANDLE hout;
+	COORD coord;
+	coord.X = 0;
+	coord.Y = 0;
+	hout = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleCursorPosition(hout, coord);
+	//SetConsoleScreenBufferSize(hout, coord);
+	Sleep(30);
+}
